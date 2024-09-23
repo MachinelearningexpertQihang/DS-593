@@ -1,0 +1,22 @@
+import sqlite3
+import pandas as pd
+
+# Connect to the SQLite database
+conn = sqlite3.connect('health_events_data.db')
+
+# Load data from the 'health_events' table into a DataFrame
+df = pd.read_sql_query("SELECT * FROM health_events", conn)
+
+# 1. Number of missing cells by column
+missing_cells = df.isnull().sum()
+print("Missing cells by column:")
+print(missing_cells)
+
+# 2. Number of categories in specific columns
+columns_to_check = ['Condition', 'Agent', 'Reporting Agency', 'City']  # Update these column names as necessary
+category_counts = {col: df[col].nunique() for col in columns_to_check}
+print("\nNumber of categories in specific columns:")
+print(category_counts)
+
+# Close the connection
+conn.close()
